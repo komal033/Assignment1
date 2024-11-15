@@ -1,39 +1,41 @@
-﻿using Assignment.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using Assignment.Models;
+using Dapper;
 using System.Linq;
-using System.Web;
+using Assignment.Models;
 
-namespace Assignment.DAL
+namespace Assignment.ProductDAL
 {
     public class ProductDAL
     {
-        private readonly string connectionString = "Data Source=DESKTOP-QLCNTQ7\\SQLEXPRESS;Initial Catalog=assignment;Integrated Security=True;Encrypt=False";
+        private readonly string connectionString = "Data Source=DESKTOP-QLCNTQ7\\SQLEXPRESS;Initial Catalog=assignment;Integrated Security=True;Encrypt=False ";
 
         // Method to get all products
-        public List<Product> GetAllProducts()
+        public IEnumerable<Product> GetProducts(int pageNumber, int pageSize)
         {
-            var products = new List<Product>();
-
             using (var connection = new SqlConnection(connectionString))
             {
-                var command = new SqlCommand("SELECT ProductId, ProductName, CategoryId FROM Product", connection);
-                connection.Open();
-                var reader = command.ExecuteReader();
+                connection.Open(); // Ensure connection is opened before querying
+                var query = @"
+            SELECT * FROM (
+                SELECT 
+                    ROW_NUMBER() OVER (ORDER BY ProductId) AS RowNum, 
+                    ProductId, ProductName, CategoryId
+                FROM Product
+            ) AS Paginated
+            WHERE RowNum BETWEEN @StartRow AND @EndRow";
 
-                while (reader.Read())
+                var parameters = new
                 {
-                    var product = new Product
-                    {
-                        ProductId = Convert.ToInt32(reader["ProductId"]),
-                        ProductName = reader["ProductName"].ToString(),
-                        CategoryId = Convert.ToInt32(reader["CategoryId"]),
-                    };
-                    products.Add(product);
-                }
+                    StartRow = (pageNumber - 1) * pageSize + 1,
+                    EndRow = pageNumber * pageSize
+                };
+
+                return connection.Query<Product>(query, parameters).ToList();
             }
-            return products;
         }
 
         // Method to get a product by its ID
@@ -105,4 +107,3 @@ namespace Assignment.DAL
         }
     }
 }
-    
