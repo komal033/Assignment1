@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Assignment.Models.Product>
+@model IEnumerable<Assignment.Models.Product>
 
 @{
     ViewBag.Title = "Index";
@@ -27,9 +27,11 @@
     @foreach (var item in Model)
     {
         <tr>
+
             <td>
                 @Html.DisplayFor(modelItem => item.ProductId)
             </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
@@ -45,3 +47,14 @@
     }
 
 </table>
+<div class="pagination">
+    @if (ViewBag.PageNumber > 1)
+    {
+        <a class="btn btn-secondary me-2" href="@Url.Action("Index", new { pageNumber = ViewBag.PageNumber - 1, pageSize = ViewBag.PageSize })">Previous</a>
+    }
+
+    @if (Model.Any() && Model.Count() >= ViewBag.PageSize)
+    {
+        <a class="btn btn-secondary" href="@Url.Action("Index", new { pageNumber = ViewBag.PageNumber + 1, pageSize = ViewBag.PageSize })">Next</a>
+    }
+</div>
