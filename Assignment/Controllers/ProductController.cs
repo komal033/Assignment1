@@ -1,93 +1,87 @@
-﻿using Assignment.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using Assignment.DAL;
+using Assignment.Models;
+using System.Web.Mvc;
+using Assignment.Models;
+using Assignment.ProductDAL;
 
-namespace Assignment.Controllers
+public class ProductController : Controller
 {
-    public class ProductController : Controller
+    private readonly ProductDAL _repository = new ProductDAL();
+
+    public ActionResult Index(int pageNumber = 1, int pageSize = 10)
     {
-        private readonly ProductDAL productRepository = new ProductDAL();
+        // Fetch paginated products
+        var products = _repository.GetProducts(pageNumber, pageSize);
 
-        // Display all products
-        public ActionResult Index()
+        // Store page info in ViewBag for pagination
+        ViewBag.PageNumber = pageNumber;
+        ViewBag.PageSize = pageSize;
+
+        return View(products);
+    }
+
+
+    public ActionResult Details(int id)
+    {
+        var product = _repository.GetProductById(id);
+        if (product == null)
         {
-            var products = productRepository.GetAllProducts();
-            return View(products);
+            return HttpNotFound();
         }
+        return View(product);
+    }
 
-        // Display details of a specific product
-        public ActionResult Details(int id)
-        {
-            var product = productRepository.GetProductById(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
+    public ActionResult Create()
+    {
+        return View();
+    }
 
-        // Show the form to create a new product
-        public ActionResult Create()
+    [HttpPost]
+    public ActionResult Create(Product product)
+    {
+        if (ModelState.IsValid)
         {
-            return View();
-        }
-
-        // Handle the form submission to create a new product
-        [HttpPost]
-        public ActionResult Create(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                productRepository.AddProduct(product);
-                return RedirectToAction("Index");
-            }
-            return View(product);
-        }
-
-        // Show the form to edit an existing product
-        public ActionResult Edit(int id)
-        {
-            var product = productRepository.GetProductById(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
-
-        // Handle the form submission to edit an existing product
-        [HttpPost]
-        public ActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                productRepository.UpdateProduct(product);
-                return RedirectToAction("Index");
-            }
-            return View(product);
-        }
-
-        // Handle deleting a product
-        public ActionResult Delete(int id)
-        {
-            var product = productRepository.GetProductById(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
-
-        // Confirm deletion of the product
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            productRepository.DeleteProduct(id);
+            _repository.AddProduct(product);
             return RedirectToAction("Index");
         }
+        return View(product);
+    }
+
+    public ActionResult Edit(int id)
+    {
+        var product = _repository.GetProductById(id);
+        if (product == null)
+        {
+            return HttpNotFound();
+        }
+        return View(product);
+    }
+
+    [HttpPost]
+    public ActionResult Edit(Product product)
+    {
+        if (ModelState.IsValid)
+        {
+            _repository.UpdateProduct(product);
+            return RedirectToAction("Index");
+        }
+        return View(product);
+    }
+
+    public ActionResult Delete(int id)
+    {
+        var product = _repository.GetProductById(id);
+        if (product == null)
+        {
+            return HttpNotFound();
+        }
+        return View(product);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+        _repository.DeleteProduct(id);
+        return RedirectToAction("Index");
     }
 }
