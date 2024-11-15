@@ -1,4 +1,4 @@
-INSERT INTO Product1 (ProductName, CategoryId)
+INSERT INTO Product (ProductName, CategoryId)
 VALUES
 -- Electronics (CategoryId = 1)
 ('Smartphone', 1),
