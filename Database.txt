@@ -1,46 +1,71 @@
-create database assignment;
-use assignment;
-
--- Create Category Table
-CREATE TABLE Category (
-    CategoryId INT PRIMARY KEY IDENTITY(1,1),
-    CategoryName NVARCHAR(100) NOT NULL
-);
-
--- Create Product Table
-CREATE TABLE Product (
-    ProductId INT PRIMARY KEY IDENTITY(1,1),
-    ProductName NVARCHAR(100) NOT NULL,
-    CategoryId INT NOT NULL,
-    FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
-);
-
-
--- Insert 10 entries into Category Table
-INSERT INTO Category (CategoryName) 
-VALUES 
-('Electronics'),
-('Books'),
-('Clothing'),
-('Home & Kitchen'),
-('Sports'),
-('Toys'),
-('Beauty'),
-('Health'),
-('Automotive'),
-('Grocery');
-
--- Insert 8 records into ProductMaster table
-INSERT INTO ProductMaster (ProductName, CategoryId)
+INSERT INTO Product1 (ProductName, CategoryId)
 VALUES
+-- Electronics (CategoryId = 1)
 ('Smartphone', 1),
 ('Laptop', 1),
 ('Television', 1),
+('Tablet', 1),
+('Smartwatch', 1),
+
+-- Books (CategoryId = 2)
 ('Science Fiction Book', 2),
 ('Cooking Book', 2),
+('History Book', 2),
+('Fantasy Novel', 2),
+('Biography', 2),
+
+-- Clothing (CategoryId = 3)
+('T-Shirt', 3),
+('Jeans', 3),
+('Jacket', 3),
+('Socks', 3),
+('Sneakers', 3),
+
+-- Home & Kitchen (CategoryId = 4)
 ('Coffee Maker', 4),
 ('Blender', 4),
-('Yoga Mat', 5);
+('Microwave Oven', 4),
+('Dinner Set', 4),
+('Vacuum Cleaner', 4),
 
+-- Sports (CategoryId = 5)
+('Yoga Mat', 5),
+('Dumbbells', 5),
+('Football', 5),
+('Tennis Racket', 5),
+('Running Shoes', 5),
 
- 
+-- Toys (CategoryId = 6)
+('Action Figure', 6),
+('Puzzle Set', 6),
+('Building Blocks', 6),
+('Remote Control Car', 6),
+('Dollhouse', 6),
+
+-- Beauty (CategoryId = 7)
+('Lipstick', 7),
+('Foundation', 7),
+('Eyeliner', 7),
+('Moisturizer', 7),
+('Hair Straightener', 7),
+
+-- Health (CategoryId = 8)
+('First Aid Kit', 8),
+('Thermometer', 8),
+('Blood Pressure Monitor', 8),
+('Vitamins', 8),
+('Protein Powder', 8),
+
+-- Automotive (CategoryId = 9)
+('Car Battery', 9),
+('Car Wash Shampoo', 9),
+('Tire Inflator', 9),
+('Dashboard Cleaner', 9),
+('Car Cover', 9),
+
+-- Grocery (CategoryId = 10)
+('Rice Bag', 10),
+('Pasta Pack', 10),
+('Olive Oil', 10),
+('Cereal Box', 10),
+('Coffee Beans', 10);
