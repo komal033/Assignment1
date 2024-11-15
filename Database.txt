@@ -1,0 +1,46 @@
+create database assignment;
+use assignment;
+
+-- Create Category Table
+CREATE TABLE Category (
+    CategoryId INT PRIMARY KEY IDENTITY(1,1),
+    CategoryName NVARCHAR(100) NOT NULL
+);
+
+-- Create Product Table
+CREATE TABLE Product (
+    ProductId INT PRIMARY KEY IDENTITY(1,1),
+    ProductName NVARCHAR(100) NOT NULL,
+    CategoryId INT NOT NULL,
+    FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
+);
+
+
+-- Insert 10 entries into Category Table
+INSERT INTO Category (CategoryName) 
+VALUES 
+('Electronics'),
+('Books'),
+('Clothing'),
+('Home & Kitchen'),
+('Sports'),
+('Toys'),
+('Beauty'),
+('Health'),
+('Automotive'),
+('Grocery');
+
+-- Insert 8 records into ProductMaster table
+INSERT INTO ProductMaster (ProductName, CategoryId)
+VALUES
+('Smartphone', 1),
+('Laptop', 1),
+('Television', 1),
+('Science Fiction Book', 2),
+('Cooking Book', 2),
+('Coffee Maker', 4),
+('Blender', 4),
+('Yoga Mat', 5);
+
+
+ 
