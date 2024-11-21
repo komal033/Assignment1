@@ -1,3 +1,5 @@
+create database assignment;
+use assignment;
 -- Create Category Table
 CREATE TABLE Category (
     CategoryId INT PRIMARY KEY IDENTITY(1,1),
